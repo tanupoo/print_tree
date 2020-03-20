@@ -28,9 +28,9 @@ def __sort_tree(xlist):
 
 def print_tree(L, sorting=True, style=["> ", "+-", "+-", False]):
     """
-    The input L must be a list of the nodes formed a top-down tree like below:
-    '_id' is the name of the node.  '_child' contains its child nodes.
-    Any other keys will be ignored.
+    The input L must be a linked list structure formed a top-down tree
+    like below.  '_id' is the name of the node.  '_child' contains its
+    child nodes.  Any other keys will be ignored.
 
     The example of L:
 
@@ -55,19 +55,30 @@ def print_tree(L, sorting=True, style=["> ", "+-", "+-", False]):
         ]
 
     The order of nodes doesn't matter.  These are alphabetically sorted
-    by default.  You can stop it when you specify False to the sorting option.
+    by default.  You can stop it when you specify False to the sorting
+    option.
 
     The style option is used to change the form of tree:
+
         style[0]: the string closest to each child node.
         style[1]: the rest of the string in the normal child node.
         style[2]: the rest of the string in the last child node.
         style[3]: whether to add a line specing.
 
-    The default style is ["> ", "+-", "+-", False], which results like below:
+    The default value of the style option is ["> ", "+-", "+-", False],
+    which results like below:
 
-        +-> A
+        +-> C
         |   +-> B
-        |   +-> C
+        |       +-> D
+        |       |   +-> H
+        |       |       +-> I
+        |       +-> G
+        +-> F
+            +-> A
+            |   +-> E
+            |   +-> J
+            +-> K
 
     For example, The possible styles would be:
 
