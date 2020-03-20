@@ -6,9 +6,9 @@ for a dum terminal.
 
 - print_tree.py: the main function to print a linked list that is structed
   by a top-down tree.
-- make_from_bottom_up_tree.py: a function to convert from a bottom-up tree.
+- make_from_bottom_up_tree.py: a function to convert from a bottom-up tree into   a top-down tree.
 - make_dir_tree.py: a function to make a top-down tree of a directory.
-- 
+
 ## Sample
 
 You can see below results by executing print_tree.py with a number from 0 to 3.
