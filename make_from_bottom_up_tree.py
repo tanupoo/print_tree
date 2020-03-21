@@ -1,6 +1,9 @@
 def make_from_bottom_up_tree(L, keys=("__id", "__parent")):
     """
     convert into a top-down tree from a bottom up tree.
+    L: a bottom-up tree.  L will not be preserved.
+    keys[0]: the key string of the identifier of a node.
+    keys[1]: the key string of the parent node of a node.
     """
     def suspend(obj, xlist, keys):
         (key_node_id, key_parent) = keys
