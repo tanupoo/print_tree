@@ -72,33 +72,42 @@ You can see below results by executing print_tree.py with a number from 0 to 3.
 *COPIED FROM help(print_tree)*
 
 ```
-print_tree(L, sorting=True, style=['> ', '+-', '+-', False])
+print_tree(L, sorting=True, keys=('__id', '__children'),
+           style=('> ', '+-', '+-', False))
 ```
 
-The input L must be a linked list structure formed a top-down tree
-like below.  '_id' is the name of the node.  '_child' contains its
-child nodes.  Any other keys will be ignored.
+The input L must be a list of tree structures formed a top-down tree
+like below.  By default, '__id' is the identifier of the node.
+'__children' is the key containing its child nodes.  You can change
+the name of both keys by redefining the keys option:
+
+```
+keys[0]: the key string of the node.
+keys[1]: the key string of the list of the children.
+```
+
+Any other keys in L will be ignored.
 
 The example of L:
 
 ```
 L = [
-    { "_id":"C", "_child": [
-        { "_id":"B", "_child": [
-            { "_id":"G", "_child": [] },
-            { "_id":"D", "_child": [
-                { "_id":"H", "_child": [
-                        { "_id":"I", "_child": [] }
+    { "__id":"C", "__children": [
+        { "__id":"B", "__children": [
+            { "__id":"G", "__children": [] },
+            { "__id":"D", "__children": [
+                { "__id":"H", "__children": [
+                        { "__id":"I", "__children": [] }
                 ] },
             ] },
         ] },
     ] },
-    { "_id":"F", "_child": [
-        { "_id":"A", "_child": [
-            { "_id":"J", "_child": [] },
-            { "_id":"E", "_child": [] },
+    { "__id":"F", "__children": [
+        { "__id":"A", "__children": [
+            { "___id":"J", "___children": [] },
+            { "__id":"E", "__children": [] },
         ] },
-        { "_id":"K", "_child": [] },
+        { "__id":"K", "__children": [] },
     ] },
 ]
 ```
@@ -109,31 +118,36 @@ option.
 
 The style option is used to change the form of tree:
 
-    style[0]: the string closest to each child node.
-    style[1]: the rest of the string in the normal child node.
-    style[2]: the rest of the string in the last child node.
-    style[3]: whether to add a line specing.
+```
+style[0]: the string closest to each child node.
+style[1]: the rest of the string in the normal child node.
+style[2]: the rest of the string in the last child node.
+style[3]: whether to add a line specing.
+```
 
-The default value of the style option is ["> ", "+-", "+-", False],
+The default value of the style option is ("> ", "+-", "+-", False),
 which results like below:
 
-    +-> C
-    |   +-> B
-    |       +-> D
-    |       |   +-> H
-    |       |       +-> I
-    |       +-> G
-    +-> F
-        +-> A
-        |   +-> E
-        |   +-> J
-        +-> K
+```
++-> C
+|   +-> B
+|       +-> D
+|       |   +-> H
+|       |       +-> I
+|       +-> G
++-> F
+    +-> A
+    |   +-> E
+    |   +-> J
+    +-> K
+```
 
 For example, The possible styles would be:
 
 ```
-["> ", "+-", "'-", False]
-[" ", "+-", "+-", False]
-[" ", "+-", "'-", False]
+("> ", "+-", "'-", False)
+(" ", "+-", "'-", False)
+(" ", "+-", "+-", False)
 ```
+
 
