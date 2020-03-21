@@ -1,13 +1,14 @@
 print_tree
 ==========
 
-A command line tool and python functions to print a linked list
+A command line tool and python functions to print a tree structure
 for a dum terminal.
 
-- print_tree.py: the main function to print a linked list that is structed
-  by a top-down tree.
-- make_from_bottom_up_tree.py: a function to convert from a bottom-up tree into   a top-down tree.
+- print_tree.py: the main function to print a tree structed by a top-down tree.
+- make_from_bottom_up_tree.py: a function to convert from a bottom-up tree into   a top-down tree, which can be used by print_tree().
 - make_dir_tree.py: a function to make a top-down tree of a directory.
+
+You can see some examples in above functions.
 
 ## Sample
 
