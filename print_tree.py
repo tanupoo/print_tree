@@ -1,56 +1,35 @@
-def __walk_tree(xlist, header, style):
-    (HDR1, HDR_NRM, HDR_END, add_line) = style
-    padlen = len(HDR_NRM + HDR1)
-    n = 0
-    for x in xlist:
-        n += 1
-        #
-        if add_line:
-            print(header + "|")
-        #
-        if n == len(xlist):
-            print(header + HDR_END + HDR1 + x["_id"])
-        else:
-            print(header + HDR_NRM + HDR1 + x["_id"])
-        #
-        c = x.get("_child")
-        if c:
-            if n == len(xlist):
-                __walk_tree(c, header + " ".ljust(padlen), style)
-            else:
-                __walk_tree(c, header + "|".ljust(padlen), style)
-
-def __sort_tree(xlist):
-    for x in xlist:
-        if x.get("_child"):
-            x["_child"] = __sort_tree(x["_child"])
-    return sorted(xlist, key=lambda x:(x["_id"]))
-
-def print_tree(L, sorting=True, style=["> ", "+-", "+-", False]):
+def print_tree(L, sorting=True, keys=("__id", "__children"),
+               style=("> ", "+-", "+-", False)):
     """
-    The input L must be a linked list structure formed a top-down tree
-    like below.  '_id' is the name of the node.  '_child' contains its
-    child nodes.  Any other keys will be ignored.
+    The input L must be a list of tree structures formed a top-down tree
+    like below.  By default, '__id' is the identifier of the node.
+    '__children' is the key containing its child nodes.  You can change
+    the name of both keys by redefining the keys option:
+    
+        keys[0]: the key string of the node.
+        keys[1]: the key string of the list of the children.
+
+    Any other keys in L will be ignored.
 
     The example of L:
 
         L = [
-            { "_id":"C", "_child": [
-                { "_id":"B", "_child": [
-                    { "_id":"G", "_child": [] },
-                    { "_id":"D", "_child": [
-                        { "_id":"H", "_child": [
-                                { "_id":"I", "_child": [] }
+            { "__id":"C", "__children": [
+                { "__id":"B", "__children": [
+                    { "__id":"G", "__children": [] },
+                    { "__id":"D", "__children": [
+                        { "__id":"H", "__children": [
+                                { "__id":"I", "__children": [] }
                         ] },
                     ] },
                 ] },
             ] },
-            { "_id":"F", "_child": [
-                { "_id":"A", "_child": [
-                    { "_id":"J", "_child": [] },
-                    { "_id":"E", "_child": [] },
+            { "__id":"F", "__children": [
+                { "__id":"A", "__children": [
+                    { "___id":"J", "___children": [] },
+                    { "__id":"E", "__children": [] },
                 ] },
-                { "_id":"K", "_child": [] },
+                { "__id":"K", "__children": [] },
             ] },
         ]
 
@@ -65,7 +44,7 @@ def print_tree(L, sorting=True, style=["> ", "+-", "+-", False]):
         style[2]: the rest of the string in the last child node.
         style[3]: whether to add a line specing.
 
-    The default value of the style option is ["> ", "+-", "+-", False],
+    The default value of the style option is ("> ", "+-", "+-", False),
     which results like below:
 
         +-> C
@@ -82,41 +61,73 @@ def print_tree(L, sorting=True, style=["> ", "+-", "+-", False]):
 
     For example, The possible styles would be:
 
-        ["> ", "+-", "'-", False]
-        [" ", "+-", "+-", False]
-        [" ", "+-", "'-", False]
+        ("> ", "+-", "'-", False)
+        (" ", "+-", "'-", False)
+        (" ", "+-", "+-", False)
 
     """
+    def sort_tree(xlist, key_node_id, key_children):
+        for x in xlist:
+            if x.get(key_children):
+                x[key_children] = sort_tree(x[key_children],
+                                            key_node_id, key_children)
+        return sorted(xlist, key=lambda x:(x[key_node_id]))
+
+    def walk_tree(xlist, header, keys, style):
+        (key_node_id, key_children) = keys
+        (HDR1, HDR_NRM, HDR_END, add_line) = style
+        padlen = len(HDR_NRM + HDR1)
+        n = 0
+        for x in xlist:
+            n += 1
+            #
+            if add_line:
+                print(header + "|")
+            #
+            if n == len(xlist):
+                print(header + HDR_END + HDR1 + x[key_node_id])
+            else:
+                print(header + HDR_NRM + HDR1 + x[key_node_id])
+            #
+            c = x.get(key_children)
+            if c:
+                if n == len(xlist):
+                    walk_tree(c, header + " ".ljust(padlen), keys, style)
+                else:
+                    walk_tree(c, header + "|".ljust(padlen), keys, style)
+
     if sorting:
-        L = __sort_tree(L)
-    __walk_tree(L, "", style)
+        L = sort_tree(L, keys[0], keys[1])
+    walk_tree(L, "", keys, style)
 
 if __name__ == "__main__":
     from sys import argv
     L = [
-        { "_id":"C", "_child": [
-            { "_id":"B", "_child": [
-                { "_id":"G", "_child": [] },
-                { "_id":"D", "_child": [
-                    { "_id":"H", "_child": [
-                            { "_id":"I", "_child": [] }
+        { "ID":"C", "NODES": [
+            { "ID":"B", "NODES": [
+                { "ID":"G", "NODES": [] },
+                { "ID":"D", "NODES": [
+                    { "ID":"H", "NODES": [
+                            { "ID":"I", "NODES": [] }
                     ] },
                 ] },
             ] },
         ] },
-        { "_id":"F", "_child": [
-            { "_id":"A", "_child": [
-                { "_id":"J", "_child": [] },
-                { "_id":"E", "_child": [] },
+        { "ID":"F", "NODES": [
+            { "ID":"A", "NODES": [
+                { "ID":"J", "NODES": [] },
+                { "ID":"E", "NODES": [] },
             ] },
-            { "_id":"K", "_child": [] },
+            { "ID":"K", "NODES": [] },
         ] },
     ]
-    _style = [
-        ["> ", "+-", "+-", False],
-        ["> ", "+-", "'-", False],
-        [" ", "+-", "+-", False],
-        [" ", "+-", "'-", False],
+    #
+    keys = ("ID", "NODES")
+    style = [
+        ("> ", "+-", "+-", False),
+        ("> ", "+-", "'-", False),
+        (" ", "+-", "+-", False),
+        (" ", "+-", "'-", False),
     ]
     # % python print_tree.py 0
     # +-> C
@@ -169,4 +180,4 @@ if __name__ == "__main__":
     style_index = 0
     if len(argv) == 2:
         style_index = int(argv[1])
-    print_tree(L, sorting=True, style=_style[style_index])
+    print_tree(L, keys=keys, style=style[style_index])

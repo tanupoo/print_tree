@@ -3,13 +3,13 @@ from os import scandir, path
 def make_dir_tree(top_dir):
     # assuming top_dir is a directory.
     L = []
-    dir_attr = { "_id":path.basename(top_dir), "_child":[] }
+    dir_attr = { "__id":path.basename(top_dir), "__children":[] }
     with scandir(top_dir) as fd:
         for entry in fd:
             if entry.is_dir():
-                dir_attr["_child"].extend(make_dir_tree(entry.path))
+                dir_attr["__children"].extend(make_dir_tree(entry.path))
             else:
-                dir_attr["_child"].append({"_id":entry.name})
+                dir_attr["__children"].append({"__id":entry.name})
         L.append(dir_attr)
     return L
 

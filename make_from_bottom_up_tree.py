@@ -1,41 +1,42 @@
-def make_from_bottom_up_tree(L):
-    def suspend(obj, xlist):
+def make_from_bottom_up_tree(L, keys=("__id", "__parent")):
+    """
+    convert into a top-down tree from a bottom up tree.
+    """
+    def suspend(obj, xlist, keys):
+        (key_node_id, key_parent) = keys
         for x in xlist:
-            if obj["PID"] == x["_id"]:
-                x.setdefault("_child", []).append(obj)
+            if obj[key_parent] == x[key_node_id]:
+                x.setdefault("__children", []).append(obj)
                 return True
-            elif x.get("_child"):
-                if suspend(obj, x.get("_child")):
+            elif x.get("__children"):
+                if suspend(obj, x.get("__children"), keys):
                     return True
 
+    (key_node_id, key_parent) = keys
     for i in range(len(L)):
         x = L.pop(0)
-        if x["PID"]:
-            suspend(x, L)
+        if x[key_parent]:
+            suspend(x, L, keys)
         else:
             L.append(x)
 
 if __name__ == "__main__":
     from print_tree import print_tree
     from random import shuffle
-    from sys import argv
     L = [
-        { "_id":"H", "PID":"D" },
-        { "_id":"A", "PID":"F" },
-        { "_id":"C", "PID":None },
-        { "_id":"G", "PID":"B" },
-        { "_id":"J", "PID":"A" },
-        { "_id":"I", "PID":"H" },
-        { "_id":"B", "PID":"C" },
-        { "_id":"E", "PID":"A" },
-        { "_id":"F", "PID":None },
-        { "_id":"K", "PID":"F" },
-        { "_id":"D", "PID":"B" },
+        { "ID":"H", "PID":"D" },
+        { "ID":"A", "PID":"F" },
+        { "ID":"C", "PID":None },
+        { "ID":"G", "PID":"B" },
+        { "ID":"J", "PID":"A" },
+        { "ID":"I", "PID":"H" },
+        { "ID":"B", "PID":"C" },
+        { "ID":"E", "PID":"A" },
+        { "ID":"F", "PID":None },
+        { "ID":"K", "PID":"F" },
+        { "ID":"D", "PID":"B" },
     ]
     shuffle(L)
-    make_from_bottom_up_tree(L)
+    make_from_bottom_up_tree(L, keys=("ID", "PID"))
     #
-    style_index = 0
-    if len(argv) == 2:
-        style_index = int(argv[1])
-    print_tree(L)
+    print_tree(L, keys=("ID", "__children"))
