@@ -34,7 +34,7 @@ if __name__ == "__main__":
     try:
         for d in top_dir:
             L = make_dir_tree(d)
-            print_tree(L, style=[" ", "+-", "'-", False])
+            print_tree(L, style=[" ", "|--", "'--", False])
     except NotADirectoryError as e:
         print(f"ERROR: {top_dir} is not a directory.")
         exit(0)
