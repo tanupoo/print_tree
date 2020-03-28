@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from os import scandir, path
 
 def make_dir_tree(top_dir):
@@ -20,5 +22,9 @@ if __name__ == "__main__":
         top_dir = "."
     else:
         top_dir = argv[1]
-    L = make_dir_tree(top_dir)
+    try:
+        L = make_dir_tree(top_dir)
+    except NotADirectoryError as e:
+        print(f"ERROR: {top_dir} is not a directory.")
+        exit(0)
     print_tree(L, style=[" ", "+-", "'-", False])
