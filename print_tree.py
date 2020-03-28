@@ -1,5 +1,5 @@
-def print_tree(L, sorting=True, keys=("__id", "__children"),
-               style=("> ", "+-", "+-", False)):
+def print_tree(L, sorting=True, compress=True,
+               keys=("__id", "__children"), style=("> ", "+-", "+-", False)):
     """
     The input L must be a list of tree structures formed a top-down tree
     like below.  By default, '__id' is the identifier of the node.
@@ -98,6 +98,10 @@ def print_tree(L, sorting=True, keys=("__id", "__children"),
 
     if sorting:
         L = sort_tree(L, keys[0], keys[1])
+    if compress is True and len(L) == 1:
+        (key_node_id, key_children) = keys
+        print(L[0][key_node_id])
+        L = L[0][key_children]
     walk_tree(L, "", keys, style)
 
 if __name__ == "__main__":
